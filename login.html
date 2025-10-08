@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Farmer's Market - Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: #f0f8e6;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+        url('https://th.bing.com/th/id/OIP.aabmUgqpzKeKL7epXvIBAgHaEK?cb=iwp1&rs=1&pid=ImgDetMain');
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+
+    .container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+      width: 400px;
+      overflow: hidden;
+      animation: fadeIn 0.8s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 25px 20px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: url('/api/placeholder/400/100');
+      background-size: cover;
+      background-position: center;
+      opacity: 0.2;
+      z-index: 0;
+    }
+
+    .header h2 {
+      margin-bottom: 5px;
+      position: relative;
+      z-index: 1;
+      font-size: 26px;
+    }
+
+    .header p {
+      font-size: 14px;
+      opacity: 0.9;
+      position: relative;
+      z-index: 1;
+    }
+
+    .login-form {
+      padding: 30px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group select {
+      background-color: white;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #4CAF50;
+      box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+      outline: none;
+    }
+
+    .btn {
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 6px;
+      width: 100%;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px 15px;
+      border-top: 1px solid #eee;
+      background-color: #f9f9f9;
+    }
+
+    .footer a {
+      color: #4CAF50;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      padding: 12px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      display: none;
+      font-weight: 500;
+    }
+
+    .error {
+      background-color: #f8d7da;
+      color: #721c24;
+      border-left: 4px solid #dc3545;
+    }
+
+    .success {
+      background-color: #d4edda;
+      color: #155724;
+      border-left: 4px solid #28a745;
+    }
+
+    .input-icon {
+      position: relative;
+    }
+
+    .input-icon input {
+      padding-left: 40px;
+    }
+
+    .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #6c757d;
+    }
+
+    /* Simple logo */
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 10px;
+      background-color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo svg {
+      width: 40px;
+      height: 40px;
+      fill: #4CAF50;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M20,10V8h-4V4h-2v4h-4V4H8v4H4v2h4v4H4v2h4v4h2v-4h4v4h2v-4h4v-2h-4v-4H20z M14,14h-4v-4h4V14z"/>
+        </svg>
+      </div>
+      <h2>Farmer's Market</h2>
+      <p>Login to access your account</p>
+    </div>
+
+    <div class="login-form">
+      <div class="message" id="message"></div>
+
+      <div class="form-group">
+        <label for="userType">I am a:</label>
+        <select id="userType" name="userType">
+          <option value="">-- Select user type --</option>
+          <option value="farmer">Farmer</option>
+          <option value="dealer">Dealer</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <div class="input-icon">
+          <span class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+              <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+          </span>
+          <input type="text" id="username" name="username" placeholder="Enter your username" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <div class="input-icon">
+          <span class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+          </span>
+          <input type="password" id="password" name="password" placeholder="Enter your password" required>
+        </div>
+      </div>
+
+      <button type="button" class="btn" id="loginBtn">
+        Login
+      </button>
+    </div>
+
+    <div class="footer">
+      <p>Don't have an account? <a href="#" id="registerLink">Register here</a></p>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const loginBtn = document.getElementById('loginBtn');
+      const messageDiv = document.getElementById('message');
+      const userTypeSelect = document.getElementById('userType');
+      const usernameInput = document.getElementById('username');
+      const passwordInput = document.getElementById('password');
+      const registerLink = document.getElementById('registerLink');
+
+      const users = {
+        farmers: [
+          { username: 'farmer1', password: 'pass123' },
+          { username: 'farmer2', password: 'pass123' }
+        ],
+        dealers: [
+          { username: 'dealer1', password: 'pass123' },
+          { username: 'dealer2', password: 'pass123' }
+        ]
+      };
+
+      loginBtn.addEventListener('click', function () {
+        messageDiv.style.display = 'none';
+        messageDiv.textContent = '';
+        messageDiv.className = 'message';
+
+        const userType = userTypeSelect.value;
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value.trim();
+
+        if (!userType || !username || !password) {
+          showMessage('Please fill in all fields', 'error');
+          return;
+        }
+
+        let authenticated = false;
+        let redirectUrl = '';
+
+        if (userType === 'farmer') {
+          authenticated = users.farmers.some(user =>
+            user.username === username && user.password === password);
+          redirectUrl = '/farmer';
+        } else if (userType === 'dealer') {
+          authenticated = users.dealers.some(user =>
+            user.username === username && user.password === password);
+          redirectUrl = '/manage';
+        }
+
+        if (authenticated) {
+          showMessage('Login successful! Redirecting...', 'success');
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 1500);
+        } else {
+          showMessage('Invalid username or password', 'error');
+        }
+      });
+
+      registerLink.addEventListener('click', function (e) {
+        e.preventDefault();
+        alert('Registration page would be implemented in a complete application');
+      });
+
+      function showMessage(message, type) {
+        messageDiv.textContent = message;
+        messageDiv.className = 'message ' + type;
+        messageDiv.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+</html>

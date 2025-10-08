@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Farmer Crop & Location Entry</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #a8edea, #fed6e3);
+      margin: 0;
+      padding: 30px;
+    }
+    .container {
+      background: #fff;
+      max-width: 500px;
+      margin: auto;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    select, input, button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    input:focus, select:focus, button:focus {
+      border-color: #4CAF50;
+      outline: none;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+  <script>
+    const towns = {
+      'Kurnool': ["Nandyal", "Adoni"],
+      'Anantapuram': ["Tadipatri", "Gooty"],
+      'Kadapa': ["Proddatur", "Pulivendula"],
+      'Annamayya': ["Rajampet", "Rayachoti"],
+      'Chittoor': ["Madanapalle", "Tirupati"],
+      'Vishakapatnam': ["Anakapalle", "Gajuwaka"],
+      'Srikakulam': ["Palasa", "Tekkali"],
+      'East Godavari': ["Kakinada", "Amalapuram"],
+      'Prakasam': ["Ongole", "Chirala"],
+      'West Godavari': ["Eluru", "Tadepalligudem"],
+      'Rajamundry': ["Dowleswaram", "Rajanagaram"],
+      'Guntur': ["Tenali", "Ponnur"],
+      'Nellore': ["Kavali", "Gudur"]
+    };
+
+    const locations = {
+      "Nandyal": ["Main Bazar", "Kottur"],
+      "Adoni": ["Town Center", "Old Market"],
+      "Tadipatri": ["East Street", "Railway Colony"],
+      "Gooty": ["South Market", "Gooty Fort Area"],
+      "Proddatur": ["Market Road", "Koti Circle"],
+      "Pulivendula": ["Center", "Bypass Road"],
+      "Rajampet": ["Rajampet Center", "New Town"],
+      "Rayachoti": ["Main Area", "Highway Road"],
+      "Madanapalle": ["Angallu", "Madanapalle Bazar"],
+      "Tirupati": ["Alipiri", "Renigunta"],
+      "Anakapalle": ["Main Market", "Gandhi Road"],
+      "Gajuwaka": ["Malkapuram", "Steel Plant Area"],
+      "Palasa": ["Palasa Center", "Railway Gate"],
+      "Tekkali": ["Tekkali Main", "High School Road"],
+      "Kakinada": ["Bhanugudi", "Sarpavaram"],
+      "Amalapuram": ["RTC Complex", "New Bus Stand"],
+      "Ongole": ["Kurnool Road", "Mangamuru"],
+      "Chirala": ["Ramanaidu Road", "Beach Road"],
+      "Eluru": ["RR Peta", "Powerpet"],
+      "Tadepalligudem": ["Bus Stand", "Market Area"],
+      "Dowleswaram": ["Bridge Area", "Lock Point"],
+      "Rajanagaram": ["Rajanagaram Center", "Nursing Home Road"],
+      "Tenali": ["Market Center", "Railway Station"],
+      "Ponnur": ["Ponnur Gate", "Bus Depot"],
+      "Kavali": ["Railway Road", "Trunk Road"],
+      "Gudur": ["KDP Road", "Gudur Main"]
+    };
+
+    function updateTowns() {
+      const district = document.getElementById("district").value;
+      const townSelect = document.getElementById("town");
+      townSelect.innerHTML = '<option value="">-- Select Town --</option>';
+
+      if (towns[district]) {
+        towns[district].forEach(town => {
+          const opt = document.createElement("option");
+          opt.value = opt.textContent = town;
+          townSelect.appendChild(opt);
+        });
+      }
+      updateLocations();
+    }
+
+    function updateLocations() {
+      const town = document.getElementById("town").value;
+      const locationSelect = document.getElementById("location");
+      locationSelect.innerHTML = '<option value="">-- Select Location --</option>';
+
+      if (locations[town]) {
+        locations[town].forEach(loc => {
+          const opt = document.createElement("option");
+          opt.value = opt.textContent = loc;
+          locationSelect.appendChild(opt);
+        });
+      }
+    }
+
+    function submitForm() {
+      const data = {
+        district: document.getElementById("district").value,
+        town: document.getElementById("town").value,
+        location: document.getElementById("location").value,
+        crop: document.getElementById("crop").value,
+        crop_name: document.getElementById("crop_name").value,
+        land_area: document.getElementById("land_area").value,
+        price: document.getElementById("price").value,
+        seller: document.getElementById("seller").value
+      };
+
+      if (!data.district || !data.town || !data.location || !data.crop || !data.crop_name || !data.land_area || !data.price || !data.seller) {
+        alert("⚠️ Please fill all fields.");
+        return;
+      }
+
+      fetch('http://localhost:3000/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(response => response.json())
+      .then(res => {
+        if (res.status === 'success') {
+          window.location.href = "manage.html";
+        } else {
+          alert("❌ Something went wrong. Try again.");
+        }
+      })
+      .catch(err => alert("❌ Network error. Please try again later."));
+    }
+  </script>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Farmer Crop & Location Entry</h2>
+
+    <label for="district">District:</label>
+    <select id="district" onchange="updateTowns()">
+      <option value="">-- Select District --</option>
+      <option value="Kurnool">Kurnool</option>
+      <option value="Anantapuram">Anantapuram</option>
+      <option value="Kadapa">Kadapa</option>
+      <option value="Annamayya">Annamayya</option>
+      <option value="Chittoor">Chittoor</option>
+      <option value="Vishakapatnam">Vishakapatnam</option>
+      <option value="Srikakulam">Srikakulam</option>
+      <option value="East Godavari">East Godavari</option>
+      <option value="Prakasam">Prakasam</option>
+      <option value="West Godavari">West Godavari</option>
+      <option value="Rajamundry">Rajamundry</option>
+      <option value="Guntur">Guntur</option>
+      <option value="Nellore">Nellore</option>
+    </select>
+
+    <label for="town">Town:</label>
+    <select id="town" onchange="updateLocations()">
+      <option value="">-- Select Town --</option>
+    </select>
+
+    <label for="location">Location:</label>
+    <select id="location">
+      <option value="">-- Select Location --</option>
+    </select>
+
+    <label for="crop">Crop:</label>
+    <select id="crop">
+      <option value="">-- Select Crop --</option>
+      <option value="Paddy">Paddy</option>
+      <option value="Wheat">Wheat</option>
+      <option value="Cotton">Cotton</option>
+      <option value="Maize">Maize</option>
+      <option value="Groundnut">Groundnut</option>
+    </select>
+
+    <label for="crop_name">Crop Name:</label>
+    <input type="text" id="crop_name" placeholder="Enter Crop Name"/>
+
+    <label for="land_area">Land Area (in Acres):</label>
+    <input type="number" id="land_area" placeholder="Enter Land Area"/>
+
+    <label for="price">Price (per Acre):</label>
+    <input type="number" id="price" placeholder="Enter Price"/>
+
+    <label for="seller">Seller Name:</label>
+    <input type="text" id="seller" placeholder="Enter Seller Name"/>
+
+    <button type="button" onclick="submitForm()">Submit</button>
+  </div>
+
+</body>
+</html>
+
